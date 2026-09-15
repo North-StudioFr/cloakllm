@@ -106,13 +106,28 @@ export class CustomRulesDetector implements DetectorPlugin {
 
     // 2. Match custom regex patterns
     for (const rule of this.patternRules) {
-      try {
-        const regex = new RegExp(rule.pattern, 'gu');
-        for (const match of text.matchAll(regex)) {
-          if (match.index === undefined) continue;
-          const start = match.index;
-          const end = start + match[0].length;
+      let regex: RegExp;
+      if (rule.pattern instanceof RegExp) {
+        let flags = rule.pattern.flags;
+        if (!flags.includes('g')) flags += 'g';
+        if (!flags.includes('u')) flags += 'u';
+        if (!rule.caseSensitive && !flags.includes('i')) flags += 'i';
+        regex = new RegExp(rule.pattern.source, flags);
+      } else {
+        const flags = rule.caseSensitive ? 'gu' : 'giu';
+        try {
+          regex = new RegExp(rule.pattern, flags);
+        } catch {
+          continue;
+        }
+      }
 
+      for (const match of text.matchAll(regex)) {
+        if (match.index === undefined) continue;
+        const start = match.index;
+        const end = start + match[0].length;
+
+        if (end > start) {
           matches.push({
             type: rule.type,
             value: text.substring(start, end),
@@ -121,15 +136,39 @@ export class CustomRulesDetector implements DetectorPlugin {
             confidence: 0.98,
             metadata: {
               source: 'custom_pattern',
-              patternName: rule.name,
+              ruleName: rule.name,
             },
           });
         }
-      } catch (err) {
-        // Ignore invalid regex in user config
       }
     }
 
-    return matches;
+    // 3. Deduplicate and resolve internal overlaps
+    return this.deduplicateOverlaps(matches);
+  }
+
+  private deduplicateOverlaps(matches: DetectedEntity[]): DetectedEntity[] {
+    if (matches.length <= 1) return matches;
+
+    // Sort by length desc, confidence desc, start asc
+    const sorted = [...matches].sort((a, b) => {
+      const lenDiff = (b.end - b.start) - (a.end - a.start);
+      if (lenDiff !== 0) return lenDiff;
+      const confDiff = b.confidence - a.confidence;
+      if (confDiff !== 0) return confDiff;
+      return a.start - b.start;
+    });
+
+    const accepted: DetectedEntity[] = [];
+    for (const candidate of sorted) {
+      const overlaps = accepted.some(acc =>
+        Math.max(candidate.start, acc.start) < Math.min(candidate.end, acc.end)
+      );
+      if (!overlaps) {
+        accepted.push(candidate);
+      }
+    }
+
+    return accepted.sort((a, b) => a.start - b.start);
   }
 }

@@ -1,7 +1,9 @@
+version: '3.8'
+
 services:
   cloakllm:
     build: .
-    container_name: cloakllm-proxy
+    container_name: cloakllm
     restart: unless-stopped
     ports:
       - "8080:8080"
@@ -9,8 +11,19 @@ services:
       - PORT=8080
       - HOST=0.0.0.0
       - UPSTREAM=https://api.openai.com/v1
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8080/health"]
-      interval: 15s
-      timeout: 3s
-      retries: 3
+    command: ["-h", "0.0.0.0", "-p", "8080", "-u", "https://api.openai.com/v1"]
+
+  # Optional local SLM backend (0 € cost, zero cloud telemetry)
+  ollama:
+    image: ollama/ollama:latest
+    container_name: cloakllm-ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    profiles:
+      - with-slm
+
+volumes:
+  ollama_data:

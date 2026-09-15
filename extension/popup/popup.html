@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CloakLLM Shield</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="brand">
+        <span class="shield-icon">🛡️</span>
+        <span class="brand-name">CloakLLM</span>
+        <span class="badge">v2.0</span>
+      </div>
+      <div id="statusBadge" class="status-pill offline">
+        <span class="dot"></span>
+        <span id="statusText">Checking...</span>
+      </div>
+    </header>
+
+    <!-- Master Shield Toggle -->
+    <div class="toggle-card">
+      <div class="toggle-info">
+        <div class="toggle-title">Sovereign Privacy Shield</div>
+        <div class="toggle-sub">Intercepts & pseudonymizes prompts before upload</div>
+      </div>
+      <label class="switch">
+        <input type="checkbox" id="shieldToggle" checked>
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <!-- Metrics Row -->
+    <div class="metrics-row">
+      <div class="metric-box">
+        <div class="metric-val" id="entitiesCount">0</div>
+        <div class="metric-lbl">PII Masked</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val" style="color: #10b981;">0 €</div>
+        <div class="metric-lbl">Cloud Cost</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-val" id="proxyPort">8080</div>
+        <div class="metric-lbl">Local Port</div>
+      </div>
+    </div>
+
+    <!-- Quick Sanitize Playground -->
+    <div class="test-card">
+      <div class="test-header">Live Quick Test</div>
+      <textarea id="testInput" rows="2" placeholder="Paste test prompt with SSN, IBAN, names..."></textarea>
+      <button id="testBtn" class="btn-primary">Sanitize & Inspect</button>
+      <div id="testOutput" class="test-output" style="display: none;"></div>
+    </div>
+
+    <!-- Quick Navigation Links -->
+    <footer class="popup-footer">
+      <a id="dashboardLink" href="http://127.0.0.1:8080/dashboard" target="_blank" class="footer-btn">
+        <span>🖥️</span> Open Console
+      </a>
+      <a id="dpoReportLink" href="http://127.0.0.1:8080/api/compliance/report?format=html" target="_blank" class="footer-btn">
+        <span>📋</span> DPO Report
+      </a>
+    </footer>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

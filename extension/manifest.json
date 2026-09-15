@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "CloakLLM Shield — Sovereign AI Privacy",
+  "version": "2.0.0",
+  "description": "Local GDPR privacy firewall and prompt anonymizer for ChatGPT, Claude, and Open WebUI.",
+  "author": "CloakLLM Open Source Project",
+  "permissions": [
+    "storage",
+    "activeTab",
+    "alarms"
+  ],
+  "host_permissions": [
+    "http://127.0.0.1/*",
+    "http://localhost/*"
+  ],
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  },
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "CloakLLM Privacy Shield",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*",
+        "https://claude.ai/*",
+        "http://localhost/*",
+        "http://127.0.0.1/*"
+      ],
+      "js": [
+        "content/content.js"
+      ],
+      "css": [
+        "content/content.css"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "background": {
+    "service_worker": "background/background.js"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "shield@cloakllm.org",
+      "strict_min_version": "109.0"
+    }
+  }
+}

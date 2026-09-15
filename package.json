@@ -1,7 +1,7 @@
 {
   "name": "cloakllm",
-  "version": "2.0.0",
-  "description": "Open-source local GDPR privacy firewall and reversible de-anonymizing proxy for LLMs",
+  "version": "3.0.0",
+  "description": "Ultra-solid open-source local GDPR privacy firewall, AI policy engine, prompt firewall, and reversible de-anonymizing proxy for LLMs",
   "main": "src/index.ts",
   "type": "module",
   "bin": {
@@ -22,7 +22,12 @@
     "pii",
     "firewall",
     "openai-compatible",
-    "pseudonymization"
+    "pseudonymization",
+    "mcp",
+    "model-context-protocol",
+    "dlp",
+    "shannon-entropy",
+    "policy-as-code"
   ],
   "author": "Agence Web & Automation",
   "license": "Apache-2.0",

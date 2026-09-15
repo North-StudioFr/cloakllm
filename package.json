@@ -1,0 +1,32 @@
+{
+  "name": "cloakllm",
+  "version": "2.0.0",
+  "description": "Open-source local GDPR privacy firewall and reversible de-anonymizing proxy for LLMs",
+  "main": "src/index.ts",
+  "type": "module",
+  "bin": {
+    "cloakllm": "./bin/cloakllm.js"
+  },
+  "scripts": {
+    "test": "node --test --experimental-strip-types tests/**/*.test.ts",
+    "start": "node --experimental-strip-types src/cli.ts",
+    "dev": "node --experimental-strip-types --watch src/cli.ts"
+  },
+  "keywords": [
+    "gdpr",
+    "rgpd",
+    "llm",
+    "privacy",
+    "anonymizer",
+    "proxy",
+    "pii",
+    "firewall",
+    "openai-compatible",
+    "pseudonymization"
+  ],
+  "author": "Agence Web & Automation",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}
